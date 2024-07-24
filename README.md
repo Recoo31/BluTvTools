@@ -1,10 +1,9 @@
 
 ## Features
 
-
 - **Fetch Profiles**: Retrieve a list of user profiles using an access token and refresh token.
 - **Delete Profile**: Delete a specified profile, except for the account owner.
-- **Reset Profile PIN**: Reset the PIN to '0000'of a specified profile.
+- **Reset Profile PIN**: Reset the PIN to '0000' of a specified profile.
 - **Change Profile PIN**: Change the PIN of a specified profile.
 - **Brute-Force PIN**: Brute-force to find the PIN.
   
